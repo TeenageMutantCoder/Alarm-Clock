@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter.font import Font
 from time import sleep
 from threading import Thread
-from classes.alarm_sound import AlarmSound
+from .alarm_sound import AlarmSound
 
 
 class Timer(tk.Frame):

@@ -5,10 +5,10 @@ from PIL import ImageTk   # Allows for window icon
 from PIL import Image     # Allows for window icon
 from threading import Thread
 from os.path import relpath
-from classes.clock import Clock
-from classes.alarm import Alarm
-from classes.stopwatch import Stopwatch
-from classes.timer import Timer
+from .clock import Clock
+from .alarm import Alarm
+from .stopwatch import Stopwatch
+from .timer import Timer
 
 
 class App(tk.Tk):
@@ -25,7 +25,7 @@ class App(tk.Tk):
         self.minsize(600, 185)
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=1)
-        image_path = relpath("assets/pictures/alarm_clock4.png")
+        image_path = relpath("alarm-clock/assets/pictures/alarm_clock4.png")
         image = ImageTk.PhotoImage(Image.open(image_path))
         self.iconphoto(False, image)
 

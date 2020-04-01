@@ -2,8 +2,7 @@ from classes.app import App
 
 
 def main():
-    msg = "Input window dimensions in the form 'width, height':\n If left \
-           empty, will default to 600x185"
+    msg = "Input window dimensions in the form 'width, height':\nIf left empty, will default to 600x185\n"
     try:
         dimensions = input(msg)
         if dimensions == "":

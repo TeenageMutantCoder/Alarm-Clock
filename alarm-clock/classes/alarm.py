@@ -1,5 +1,7 @@
 import tkinter as tk
 from tkinter.font import Font
+from tkinter import messagebox
+from .alarm_sound import AlarmSound
 
 
 class Alarm(tk.Frame):
@@ -36,13 +38,37 @@ class Alarm(tk.Frame):
                                             variable=self.active_var,
                                             relief=tk.RAISED)
 
+        self.edit_frame = tk.Frame(self)
+        self.edit_button = tk.Button(self.edit_frame, text="Edit", command=self.edit_alarm)
+        self.delete_button = tk.Button(self.edit_frame, text="Delete", command=self.destroy)
+        self.test_button = tk.Button(self.edit_frame, text="Test", command=self.play_sound)
+
         self.label_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=1)
         self.alarm_label.pack(side=tk.TOP, fill=tk.BOTH, expand=1)
         self.message_frame.pack(side=tk.TOP, fill=tk.BOTH, expand=2)
         self.message_box.pack(side=tk.LEFT, fill=tk.BOTH, expand=1)
+        self.edit_frame.pack(side=tk.RIGHT, fill=tk.BOTH, expand=1)
+        self.edit_button.pack(side=tk.TOP, fill=tk.BOTH, expand=1)
+        self.delete_button.pack(side=tk.TOP, fill=tk.BOTH, expand=1)
+        self.test_button.pack(side=tk.TOP, fill=tk.BOTH, expand=1)
         self.active_frame.pack(side=tk.RIGHT, fill=tk.BOTH, expand=1)
         self.active_button.pack(side=tk.BOTTOM, fill=tk.BOTH, expand=1)
         self.alarm_repeat.pack(side=tk.TOP, expand=1)
 
     def play_sound(self):
-        pass
+        self.alarm_sound = AlarmSound(self, set_window=True)
+ 
+    def edit_alarm(self):
+        self.edit_window = tk.Toplevel(self)
+        self.save_button = tk.Button(self.edit_window, text="Save", command=self.confirm_edit)
+        self.cancel_button = tk.Button(self.edit_window, text="Cancel", command=self.edit_window.destroy)
+        self.save_button.pack(side=tk.TOP, fill=tk.BOTH, expand=1)
+        self.cancel_button.pack(side=tk.TOP, fill=tk.BOTH, expand=1)
+
+    def confirm_edit(self):
+        self.confirm = messagebox.askyesno(message="Are you sure you want to complete this action?", icon="question", title="Confirm Action",
+                            default="yes")
+        if self.confirm == "yes":
+            self.alarm_label["text"] = ""
+        else:
+            self.edit_window.destroy()
