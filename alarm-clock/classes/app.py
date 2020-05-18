@@ -5,10 +5,16 @@ from PIL import ImageTk   # Allows for window icon
 from PIL import Image     # Allows for window icon
 from threading import Thread
 from os.path import relpath
-from .clock import Clock
-from .alarm import Alarm
-from .stopwatch import Stopwatch
-from .timer import Timer
+try:
+    from clock import Clock
+    from alarms import Alarms
+    from stopwatch import Stopwatch
+    from timer import Timer
+except ImportError:
+    from .clock import Clock
+    from .alarms import Alarms
+    from .stopwatch import Stopwatch
+    from .timer import Timer
 
 
 class App(tk.Tk):
@@ -23,8 +29,6 @@ class App(tk.Tk):
         self.title("Alarm Clock")
         self.geometry(f"{self.width}x{self.height}+100+100")
         self.minsize(600, 185)
-        self.grid_columnconfigure(0, weight=1)
-        self.grid_rowconfigure(0, weight=1)
         image_path = relpath("alarm-clock/assets/pictures/alarm_clock4.png")
         image = ImageTk.PhotoImage(Image.open(image_path))
         self.iconphoto(False, image)
@@ -32,78 +36,29 @@ class App(tk.Tk):
     def add_widgets(self):
         # Tabbed view
         self.notebook = ttk.Notebook(self)
-        self.notebook.grid(sticky="NSEW")
-        self.notebook.grid_columnconfigure(0, weight=1)
-        self.notebook.grid_rowconfigure(0, weight=1)
+        self.notebook.pack(fill=tk.BOTH, expand=1)
         self.notebook.bind("<<NotebookTabChanged>>", self.manage_threads)
 
         # First Tab: Alarms
-        self.alarms_canvas = tk.Canvas(self.notebook)
-        self.alarms = tk.Frame(self.alarms_canvas)
-        self.alarms_canvas.grid(row=0, column=0, sticky="NSEW")
-        self.alarms_canvas.grid_columnconfigure(0, weight=1)
-        self.alarms_canvas.grid_rowconfigure(0, weight=1)
-
-        scrollbar = tk.Scrollbar(self.alarms_canvas, orient=tk.VERTICAL,
-                                 command=self.alarms_canvas.yview)
-        scrollbar.grid(row=0, column=1, sticky="NS")
-
-        # Creating long list of alarm frames to test scrolling and stuff
-        self.alarm_frames = []
-        for alarm in range(24):
-            self.alarm_frames.append(Alarm(self.alarms, f"{alarm}:00",
-                                           "SunMonTueWedThuFriSat", None, "",
-                                           True))
-        for alarm_frame in self.alarm_frames:
-            alarm_frame.grid(row=self.alarm_frames.index(alarm_frame),
-                             column=0, sticky="NSEW")
-            alarm_frame.grid_columnconfigure(0, weight=1)
-            alarm_frame.grid_columnconfigure(3, weight=1)
-            alarm_frame.grid_rowconfigure(0, weight=1)
-            alarm_frame.grid_rowconfigure(1, weight=1)
-
-        self.alarms_canvas.create_window(0, 0, anchor='nw', window=self.alarms,
-                                         tags="alarms")
-        self.alarms_canvas.update_idletasks()
-        self.alarms_canvas.configure(scrollregion=self.alarms_canvas.bbox('all'),
-                                     yscrollcommand=scrollbar.set)
-        self.alarms_canvas.bind("<Configure>", self.on_canvas_resize)
-        self.notebook.add(self.alarms_canvas, text="Alarms")
+        self.alarms = Alarms(self.notebook)
+        self.protocol("WM_DELETE_WINDOW", self.on_close)
+        self.alarms.pack(fill=tk.BOTH, expand=1)
+        self.notebook.add(self.alarms, text="Alarms")
 
         # Second Tab: Clock (Hopefully will add analog and digital)
         self.clock = Clock(self.notebook)
-        self.clock.grid(sticky="NSEW")
-        self.clock.grid_columnconfigure(0, weight=1)
-        self.clock.grid_rowconfigure(0, weight=1)
+        self.clock.pack(fill=tk.BOTH, expand=1)
         self.notebook.add(self.clock, text="Clock")
 
         # Third Tab: Stopwatch
         self.stopwatch = Stopwatch(self.notebook)
-        self.stopwatch.grid(sticky="NSEW")
-        self.stopwatch.grid_columnconfigure(0, weight=1)
-        self.stopwatch.grid_rowconfigure(0, weight=8)
-        self.stopwatch.grid_rowconfigure(1, weight=2)
-        self.stopwatch.grid_rowconfigure(2, weight=1)
+        self.stopwatch.pack(fill=tk.BOTH, expand=1)
         self.notebook.add(self.stopwatch, text="Stopwatch")
 
         # Fourth Tab: Timer
         self.timer = Timer(self.notebook)
-        self.timer.grid(sticky="NSEW")
-        self.timer.grid_columnconfigure(0, weight=1)
-        self.timer.grid_rowconfigure(0, weight=4)
-        self.timer.grid_rowconfigure(1, weight=1)
+        self.timer.pack(fill=tk.BOTH, expand=1)
         self.notebook.add(self.timer, text="Timer")
-
-    def on_canvas_resize(self, event):
-        for alarm_frame in self.alarm_frames:
-            alarm_frame.width = self.alarms_canvas.winfo_width()
-        self.alarms_canvas.delete("alarms")
-        self.alarms_canvas.create_window(0, 0, anchor='nw', window=self.alarms,
-                                         tags="alarms")
-        self.alarms_canvas.itemconfig('alarms',
-                                      height=self.alarms_canvas.winfo_height(),
-                                      width=self.alarms_canvas.winfo_width())
-        self.alarms_canvas.update_idletasks()
 
     def manage_threads(self, event):
         active_tab = self.notebook.tab(self.notebook.select(), "text")
@@ -150,6 +105,10 @@ class App(tk.Tk):
             self.timer.thread = Thread(target=self.timer.update,
                                        daemon=True)
             self.timer.thread.start()
+
+    def on_close(self):
+        self.alarms.db.close()
+        self.destroy()
 
     def start(self):
         self.mainloop()

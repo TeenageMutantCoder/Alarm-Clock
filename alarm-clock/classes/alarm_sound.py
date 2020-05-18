@@ -41,3 +41,13 @@ class AlarmSound():
         self.sound.stop()
         if self.set_window is True:
             self.window.destroy()
+        self.parent.alarm_sound = None
+
+
+if __name__ == "__main__":
+    root = tk.Tk()
+    root.geometry("400x100")
+    root.minsize(400, 100)
+    root.title("Alarm Sound Test")
+    alarm_sound = AlarmSound(root, set_window=True)
+    root.mainloop()

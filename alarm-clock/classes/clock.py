@@ -30,3 +30,13 @@ class Clock(tk.Frame):
             self.time_label["text"] = self.time
             self.date_label["text"] = self.date
             sleep(1)
+
+if __name__ == "__main__":
+    root = tk.Tk()
+    root.title("Clock")
+    root.geometry("200x100")
+    root.minsize(200, 100)
+    clock = Clock(root)
+    clock.pack(fill=tk.BOTH, expand=1)
+    clock.thread.start()
+    root.mainloop()

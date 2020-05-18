@@ -14,27 +14,31 @@ class Stopwatch(tk.Frame):
         self.time = "00:00:00"
         self.active = False
         self.kill = False
-        self.clock = tk.Label(self, text=str(self.time),
+        self.left = tk.Frame(self)
+        self.clock = tk.Label(self.left, text=str(self.time),
                               font=Font(family='Helvetica', size=36,
                                         weight='bold'))
-        self.active_button = tk.Button(self, text="Start", command=self.start)
-        self.restart_button = tk.Button(self, text="Restart",
+        self.button_frame = tk.Frame(self.left)
+        self.active_button = tk.Button(self.button_frame, text="Start", command=self.start)
+        self.restart_button = tk.Button(self.button_frame, text="Restart",
                                         command=self.restart)
-        self.save_button = tk.Button(self, text="Save time", command=self.save)
-        self.clear_button = tk.Button(self, text="Clear times",
+        self.save_button = tk.Button(self.button_frame, text="Save time", command=self.save)
+        self.clear_button = tk.Button(self.button_frame, text="Clear times",
                                       command=self.clear)
         self.saved_canvas = tk.Canvas(self, width=150)
         self.saved_frame = tk.LabelFrame(self.saved_canvas, text="Saved Times:")
         self.scrollbar = tk.Scrollbar(self, orient=tk.VERTICAL,
                                       command=self.saved_canvas.yview)
 
-        self.clock.grid(row=0, column=0, columnspan=4, sticky="NSEW")
-        self.active_button.grid(row=1, column=0, sticky="NSEW")
-        self.restart_button.grid(row=1, column=1, sticky="NSEW")
-        self.clear_button.grid(row=1, column=3, sticky="NSEW")
-        self.save_button.grid(row=1, column=2, sticky="NSEW")
-        self.saved_canvas.grid(row=0, column=4, rowspan=2, sticky="NS")
-        self.scrollbar.grid(row=0, column=6, rowspan=2, sticky="NS")
+        self.left.pack(side=tk.LEFT, fill=tk.BOTH, expand=1)
+        self.clock.pack(side=tk.TOP, fill=tk.BOTH, expand=1)
+        self.button_frame.pack(side=tk.BOTTOM, fill=tk.BOTH, expand=1)
+        self.active_button.pack(side=tk.LEFT, fill=tk.BOTH, expand=1)
+        self.restart_button.pack(side=tk.LEFT, fill=tk.BOTH, expand=1)
+        self.clear_button.pack(side=tk.LEFT, fill=tk.BOTH, expand=1)
+        self.save_button.pack(side=tk.LEFT, fill=tk.BOTH, expand=1)
+        self.saved_canvas.pack(side=tk.LEFT, fill=tk.Y, expand=0)
+        self.scrollbar.pack(side=tk.LEFT, fill=tk.Y, expand=0)
 
         self.saved_canvas.create_window(0, 0, anchor='nw', tags="saved",
                                         window=self.saved_frame)
@@ -117,3 +121,16 @@ class Stopwatch(tk.Frame):
         self.saved_canvas.update_idletasks()
         self.saved_canvas.configure(scrollregion=self.saved_canvas.bbox('all'),
                                     yscrollcommand=self.scrollbar.set)
+
+
+if __name__ == "__main__":
+    root = tk.Tk()
+    root.minsize(385, 100)
+    root.geometry("385x100")
+    root.title("Stopwatch")
+
+    stopwatch = Stopwatch(root)
+    stopwatch.pack(fill=tk.BOTH, expand=1)
+    stopwatch.thread.start()
+
+    root.mainloop()

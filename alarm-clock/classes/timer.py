@@ -2,7 +2,10 @@ import tkinter as tk
 from tkinter.font import Font
 from time import sleep
 from threading import Thread
-from .alarm_sound import AlarmSound
+try:
+    from alarm_sound import AlarmSound
+except ImportError:
+    from .alarm_sound import AlarmSound
 
 
 class Timer(tk.Frame):
@@ -10,9 +13,12 @@ class Timer(tk.Frame):
         tk.Frame.__init__(self, parent)
         self.active = False
         self.kill = False
-        self.start_hours = tk.IntVar(value=0)
-        self.start_minutes = tk.IntVar(value=0)
-        self.start_seconds = tk.IntVar(value=0)
+        self.start_hours = tk.StringVar(value=0)
+        self.start_minutes = tk.StringVar(value=0)
+        self.start_seconds = tk.StringVar(value=0)
+        self.start_hours.trace("w", self.remove_alpha)
+        self.start_minutes.trace("w", self.remove_alpha)
+        self.start_seconds.trace("w", self.remove_alpha)
         self.hours_left = 0
         self.minutes_left = 0
         self.seconds_left = 0
@@ -62,6 +68,29 @@ class Timer(tk.Frame):
 
         self.thread = Thread(target=self.update, daemon=True)
 
+    def remove_alpha(self, var, index, mode):
+        if str(var) == "PY_VAR0":
+            current = str(self.start_hours.get())
+            self.start_hours.set("".join(x for x in current if x.isdigit()))
+            if str(current) == "":
+                self.start_hours.set(0)
+        if str(var) == "PY_VAR1":
+            current = str(self.start_minutes.get())
+            self.start_minutes.set("".join(x for x in current if x.isdigit()))
+            current = self.start_minutes.get()
+            if str(current) == "":
+                self.start_minutes.set(0)
+            elif int(current) > 59:
+                self.start_minutes.set(59)
+        if str(var) == "PY_VAR2":
+            current = self.start_seconds.get()
+            self.start_seconds.set("".join(x for x in current if x.isdigit()))
+            current = str(self.start_seconds.get())
+            if str(current) == "":
+                self.start_seconds.set(0)
+            elif int(current) > 59:
+                self.start_seconds.set(59)
+
     def update(self):
         while True:
             if self.kill:
@@ -73,12 +102,12 @@ class Timer(tk.Frame):
                     if self.seconds_left > 0:
                         self.seconds_left -= 1
                     elif self.seconds_left <= 0:
-                        self.seconds_left = 59
                         if self.minutes_left > 0:
+                            self.seconds_left = 59
                             self.minutes_left -= 1
                         elif self.minutes_left <= 0:
-                            self.minutes_left = 59
                             if self.hours_left > 0:
+                                self.minutes_left = 59
                                 self.hours_left -= 1
                 else:
                     self.active = False
@@ -109,9 +138,9 @@ class Timer(tk.Frame):
             self.hours_left = int(self.hours_left)
 
     def start(self):
-        self.hours_left = self.start_hours.get()
-        self.minutes_left = self.start_minutes.get()
-        self.seconds_left = self.start_seconds.get()
+        self.hours_left = int(self.start_hours.get())
+        self.minutes_left = int(self.start_minutes.get())
+        self.seconds_left = int(self.start_seconds.get())
         self.spinbox_frame.pack_forget()
         self.button_frame.pack_forget()
         self.active_button.pack_forget()
@@ -135,6 +164,10 @@ class Timer(tk.Frame):
         self.active_button.config(text="Resume", command=self.resume)
 
     def stop(self):
+        if self.active is False:
+            self.start_hours.set(0)
+            self.start_minutes.set(0)
+            self.start_seconds.set(0)
         self.active = False
         if self.alarm_sound is not None:
             self.alarm_sound.stop_sound()
@@ -157,3 +190,14 @@ class Timer(tk.Frame):
         self.button_frame.pack(side=tk.TOP, fill=tk.BOTH, expand=1)
         self.active_button.pack(side=tk.LEFT, fill=tk.BOTH, expand=1)
         self.stop_button.pack(side=tk.LEFT, fill=tk.BOTH, expand=1)
+
+
+if __name__ == "__main__":
+    root = tk.Tk()
+    root.geometry("500x150")
+    root.minsize(500, 150)
+    root.title("Timer")
+    timer = Timer(root)
+    timer.pack(fill=tk.BOTH, expand=1)
+    timer.thread.start()
+    root.mainloop()
