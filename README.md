@@ -7,3 +7,5 @@ When complete, this will be a fully functioning program similar to the "Clock"
 app on Android or its iOS equivalent. It has support for a local digital clock,
 a stopwatch, alarms, and a timer at the moment. Further improvements to the alarms
 is my next task. I seek to add customizable messages, sounds, and repeat settings.
+
+Note: While the main program is in "/alarm-clock/main.py", the files in "/alarm-clock/classes" named "app.py", "alarms.py", "timer.py", "stopwatch.py", and "clock.py" work as individual programs. This was used for testing, but they should be able to be used without issue.
