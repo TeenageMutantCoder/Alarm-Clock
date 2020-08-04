@@ -2,11 +2,11 @@ import tkinter as tk
 from tkinter.font import Font
 from tkinter import messagebox
 try:
-    from .alarm_sound import AlarmSound
-    from .sql_connector import SqlConnector
-except ImportError:
     from alarm_sound import AlarmSound
     from sql_connector import SqlConnector
+except ImportError:
+    from .alarm_sound import AlarmSound
+    from .sql_connector import SqlConnector
 
 
 class Alarm(tk.Frame):
