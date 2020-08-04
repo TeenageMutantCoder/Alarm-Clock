@@ -34,8 +34,8 @@ class Clock(tk.Frame):
 if __name__ == "__main__":
     root = tk.Tk()
     root.title("Clock")
-    root.geometry("200x100")
-    root.minsize(200, 100)
+    root.geometry("600x185")
+    root.minsize(400, 150)
     clock = Clock(root)
     clock.pack(fill=tk.BOTH, expand=1)
     clock.thread.start()

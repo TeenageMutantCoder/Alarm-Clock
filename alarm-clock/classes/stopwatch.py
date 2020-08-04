@@ -126,7 +126,7 @@ class Stopwatch(tk.Frame):
 if __name__ == "__main__":
     root = tk.Tk()
     root.minsize(385, 100)
-    root.geometry("385x100")
+    root.geometry("600x185")
     root.title("Stopwatch")
 
     stopwatch = Stopwatch(root)
