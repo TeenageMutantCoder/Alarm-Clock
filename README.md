@@ -26,7 +26,11 @@ This timer counts down from the time that you set. You can also pause or stop th
 
 ![Timer_2](https://user-images.githubusercontent.com/19376473/89493727-c9d32600-d782-11ea-81fb-a022c64de70b.png)
 
-## How to Use (From Zip File with executable)
+## How to Use (From Installation Executable)
+### On Windows OS
+To use, download the installation executable from the [latest release](https://github.com/TeenageMutantCoder/Alarm-Clock/releases/latest). Then, run the executable and follow the steps in the installation wizard.
+
+## How to Use (From Zip File With Executable)
 ### On Windows OS
 To use, download the zip file from the [latest release](https://github.com/TeenageMutantCoder/Alarm-Clock/releases/latest). Then, extract the zip file and open the file "Alarm Clock.exe".
 
