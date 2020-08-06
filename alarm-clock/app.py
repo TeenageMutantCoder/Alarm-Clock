@@ -29,8 +29,8 @@ class App(tk.Tk):
         self.title("Alarm Clock")
         self.geometry(f"{self.width}x{self.height}+100+100")
         self.minsize(600, 185)
-        image_path = relpath("alarm-clock/assets/pictures/alarm_clock4.png")
-        image = ImageTk.PhotoImage(Image.open(image_path))
+        image_path = relpath("alarm-clock/assets/pictures/icon_2.ico")
+        image = ImageTk.PhotoImage(file=image_path)
         self.iconphoto(False, image)
 
     def add_widgets(self):
