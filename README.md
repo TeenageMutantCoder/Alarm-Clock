@@ -8,7 +8,8 @@ A simple alarm clock GUI project that I worked on to improve coding habits,impro
 To use, download the zip file from the [latest release](https://github.com/TeenageMutantCoder/Alarm-Clock/releases/latest). Then, extract the zip file and open the file "Alarm Clock.exe".
 
 ## How to Use (From Source Code)
-To run the source code, Python 3.8 or newer and pip must be installed. Then, you can clone the repository or download it as a zip file and extract it. Navigate to the root folder "Alarm-Clock" in Command Prompt or Terminal. Then, after creating a virtual environment (or you can just use regular pip), run the command `pip3 install -r requirements.txt`, or if that doesn't work, `pip install -r requirements.txt`. 
+To run the source code, Python 3.8 or newer and pip must be installed. Then, you can clone the repository or download it as a zip file and extract it. Navigate to the root folder "Alarm-Clock" in Command Prompt or Terminal. Then, after creating a virtual environment (or you can just use regular pip), run the command `pip3 install -r REQUIREMENTS.txt`, or if that doesn't work, `pip install -r REQUIREMENTS.txt`. 
+
 ### Full Program
 To run the full program, after having the latest stable version of Python 3 installed and the repository cloned or downloaded, navigate to the root folder of the repository "Alarm-Clock", then run the command `python -m alarm-clock` if on Windows, or `python3 -m alarm-clock` if on Mac or Linux.
 
