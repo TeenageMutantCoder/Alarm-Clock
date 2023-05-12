@@ -1,2 +1,3 @@
-Pillow==8.1.1
-pygame==1.9.6
+Pillow
+pygame
+pyinstaller
