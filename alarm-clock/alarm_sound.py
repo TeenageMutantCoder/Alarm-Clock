@@ -13,7 +13,7 @@ class AlarmSound():
         self.set_window = set_window
         self.thread = Thread(target=self.on_active, daemon=True)
         if file == "default":
-            self.file = relpath("alarm-clock/assets/sounds/beep_beep.wav")
+            self.file = relpath("assets/sounds/beep_beep.wav")
         wav = wave.open(self.file)
         frequency = wav.getframerate()
         pygame.mixer.init(frequency=frequency)
