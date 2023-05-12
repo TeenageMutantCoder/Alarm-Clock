@@ -1,1 +1,1 @@
-pyinstaller --onefile alarm-clock\app.py --distpath .\windows-x86_64\ -p alarm-clock
+pyinstaller alarm-clock\app.py -w --add-data alarm-clock\assets;assets --distpath .\dist\windows-x86_64\ --name alarm-clock -p alarm-clock
